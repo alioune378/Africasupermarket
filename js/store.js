@@ -123,7 +123,7 @@
         </ul>
       </div>
       <figure class="hero3-photo">
-        <img src="img/store-front.webp" srcset="img/store-front-800.webp 800w, img/store-front.webp 1448w" sizes="(max-width: 900px) 100vw, 52vw" alt="Africa Supermarket storefront with yellow sign, shopping carts and window displays" fetchpriority="high">
+        <img src="img/store-front.webp" srcset="img/store-front-800.webp 800w, img/store-front.webp 1448w" sizes="(max-width: 900px) 100vw, 52vw" alt="Africa Supermarket storefront: yellow sign reading Fresh Halal Meat, Groceries, Money Transfers, with shopping carts and window displays" fetchpriority="high">
         <figcaption><span class="pinb">${I("pin")}</span><span><b>${C.store.street}</b>${C.store.city}, ${C.store.state} ${C.store.zip} · <a href="${C.store.phoneHref}">${C.store.phone}</a></span></figcaption>
       </figure>
     </div></section>
