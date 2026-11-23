@@ -12,15 +12,16 @@
     $("#u-phone").innerHTML = I("phone") + " " + C.store.phone;
     const ua = $("#u-addr"); ua.href = C.store.mapsUrl; ua.innerHTML = I("pin") + " " + C.store.street + ", " + C.store.city + ", " + C.store.state + " " + C.store.zip;
     $(".hbtns a[href='#/account']").innerHTML = I("user") + "<span>Account</span>";
-    $("#crail").innerHTML = `<a href="#/shop" data-cat="">All products</a><a class="hot" href="#/brands">Shop by brand</a>` +
-      CATS.map(c => `<a href="#/shop?cat=${c.id}" data-cat="${c.id}">${c.short}</a>`).join("") + `<a href="#/boxes">Pantry boxes</a>`;
+    $("#crail").innerHTML = `<a href="#/shop" data-cat="">All products</a>` +
+      CATS.map(c => `<a href="#/shop?cat=${c.id}" data-cat="${c.id}">${c.short}</a>`).join("") + `<a href="#/beauty">Beauty</a><a href="#/brands">Brands</a><a href="#/boxes">Pantry boxes</a>`;
     $("#zipIc").innerHTML = I("pin");
     $(".search .go").innerHTML = I("search") + "<span>Search</span>";
     renderFoot(); renderBnav(); refreshChrome();
   }
   function refreshChrome() {
     const t = A.totals();
-    $("#h-cart").innerHTML = I("cart") + `<span><span class="lbl"><small>Cart</small></span><span class="amt">${t.count ? t.count + " item" + (t.count === 1 ? "" : "s") : "Empty"}</span></span>` + (t.count ? `<span class="badge">${t.count}</span>` : "");
+    $("#h-cart").innerHTML = I("cart") + `<span class="lbl">Cart</span>` + (t.count ? `<span class="badge">${t.count}</span>` : "");
+    $("#h-cart").setAttribute("aria-label", "Cart, " + t.count + " item" + (t.count === 1 ? "" : "s"));
     const w = A.wish().length;
     $("#h-wish").innerHTML = I("heart") + "<span>Saved</span>" + (w ? `<span class="badge">${w}</span>` : "");
     const f = A.fulfillment(), m = A.mode();
@@ -81,13 +82,12 @@
   function card(p) {
     const w = A.wish().includes(p.id);
     return `<article class="card">
-      <a class="media" href="#/p/${p.handle}">${A.art(p)}<span class="demo-tag">Demo item · not confirmed in store</span></a>
+      <a class="media" href="#/p/${p.handle}">${A.art(p)}</a>
       <button class="wishbtn ${w ? "on" : ""}" data-act="wish" data-id="${p.id}" data-wish="${p.id}" aria-label="Save ${esc(p.title)}" aria-pressed="${w}">${I("heart")}</button>
       <div class="body">
         <span class="brand">${esc(p.brand)}</span>
         <a class="t" href="#/p/${p.handle}">${esc(p.title)}</a>
-        <span class="s">${p.size ? esc(p.size) : "Size to be confirmed"}</span>
-        <div>${fchip(p)}</div>
+        <span class="s">${p.size ? esc(p.size) : "&nbsp;"}</span>
         <div class="prow">${A.priceHTML(p)}</div>
         <div class="actions" data-actions="${p.id}">${actionsHTML(p)}</div>
       </div></article>`;
@@ -104,109 +104,104 @@
   V.home = () => {
     const P = live(); const by = id => A.product(id);
     const brands = [...new Set(P.map(p => p.brand))].filter(b => b !== "Market pack");
-    const staples = ["r08", "r07", "r01", "r10", "r09", "r12", "r03", "r05"].map(by).filter(p => p && p.active);
-    const past = ["r08", "r07", "r11", "r05", "r09", "r12"].map(by).filter(p => p && p.active);
+    const popular = ["r11", "r05", "r09", "r12", "r08", "r07", "r03", "r06", "r01", "r10", "r04", "r02"].map(by).filter(p => p && p.active);
+    const f = A.fulfillment();
     return `
-    <section class="hero"><div class="wrap hero-grid">
-      <div class="hero-main">
-        <span class="eyebrow">Columbus, Ohio · Proposed nationwide shipping</span>
+    <section class="hero3"><div class="wrap hero3-grid">
+      <div class="hero3-copy">
+        <span class="eyebrow">African Food &amp; Beauty Supply<span class="hide-m"> · East Livingston Ave, Columbus</span></span>
         <h1>The Flavors of Africa, <em>Delivered to Your Door.</em></h1>
-        <p class="lead">The brands you grew up with, like Milo, Peak, Maggi, Indomie, Titus, garri and honey beans, ordered online from Africa Supermarket on East Livingston Avenue.</p>
-        <div class="hero-ctas"><a class="btn btn-p" href="#/shop">${I("grid")}Shop the pantry</a><a class="btn btn-o" href="#/brands">Shop by brand</a></div>
-        <div class="hero-modes">
-          <button data-act="mode" data-mode="ship">${I("truck")}<span><b>Ship nationwide</b><small>Eligible pantry items*</small></span></button>
-          <button data-act="mode" data-mode="pickup">${I("store")}<span><b>Pick up in store</b><small>Order ahead, collect in Columbus</small></span></button>
-          <button data-act="mode" data-mode="local">${I("bike")}<span><b>Local delivery</b><small>Proposed for nearby ZIPs</small></span></button>
+        <p class="lead">Your neighborhood African supermarket, now online. Order Milo, Peak, Maggi, Indomie, garri and beauty essentials, and pick up in Columbus. Shipping to other states is a proposed next step.</p>
+        <div class="hero3-ctas">
+          <a class="btn btn-p btn-lg" href="#/shop">${I("cart")}Shop groceries</a>
+          <a class="btn btn-gold btn-lg" href="#/beauty">${I("drop")}Shop beauty</a>
         </div>
+        <ul class="hero3-ways">
+          <li>${I("store")}<b>Order online, pick up in store</b></li>
+          <li>${I("bike")}<b>Local delivery</b><span class="tagp">Proposed</span></li>
+          <li>${I("truck")}<b>Nationwide shipping</b><span class="tagp">Proposed</span></li>
+        </ul>
       </div>
-      <div class="hero-side">
-        <div class="hero-shelf">
-          ${["r11", "r08", "r04", "r05", "r09", "r06"].map(by).map((p, i) => `<a class="shelf-item s${i}" href="#/p/${p.handle}">${A.art(p)}<span class="lbl"><b>${esc(p.brand)}</b>${esc(p.title)}</span></a>`).join("")}
-          <span class="cap">Demonstration items · availability at Africa Supermarket not yet confirmed</span>
-        </div>
-        <div class="hero-strip">
-          <a class="offer offer-gold" href="#/brands">${I("tag")}<span><b>${brands.length} trusted brands</b><small>Nestlé, Peak, Maggi, Indomie, Titus…</small></span></a>
-          <a class="offer offer-fresh" href="#/boxes">${I("box")}<span><b>Pantry boxes</b><small>Proposed bundles for gifts & first orders</small></span></a>
-        </div>
+      <figure class="hero3-photo">
+        <img src="img/store-front.webp" srcset="img/store-front-800.webp 800w, img/store-front.webp 1448w" sizes="(max-width: 900px) 100vw, 52vw" alt="Africa Supermarket storefront with yellow sign, shopping carts and window displays" fetchpriority="high">
+        <figcaption><span class="pinb">${I("pin")}</span><span><b>${C.store.street}</b>${C.store.city}, ${C.store.state} ${C.store.zip} · <a href="${C.store.phoneHref}">${C.store.phone}</a></span></figcaption>
+      </figure>
+    </div></section>
+
+    <section class="sec tight"><div class="wrap">
+      <div class="catrow">${CATS.map(c => { const items = P.filter(p => p.category === c.id);
+        return `<a class="catpill" href="#/shop?cat=${c.id}"><span class="cpimg">${items[0] ? A.art(items[0]) : ""}</span><b>${c.short}</b></a>`; }).join("")}
+        <a class="catpill beautypill" href="#/beauty"><span class="cpimg"><img src="img/store-beauty-800.webp" alt=""></span><b>Beauty</b></a>
       </div>
     </div></section>
 
     <section class="sec"><div class="wrap">
-      <div class="sec-h"><div><span class="eyebrow">Aisles</span><h2>Shop by category</h2></div><a class="more" href="#/shop">All products ${I("arrow")}</a></div>
-      <div class="cats">${CATS.map(c => { const items = P.filter(p => p.category === c.id);
-        return `<a class="cat" href="#/shop?cat=${c.id}" style="background:${c.tint}"><span class="catstack">${items.slice(0, 3).map(p => A.art(p)).join("")}</span><b>${c.name}</b><small>${items.length} demo item${items.length === 1 ? "" : "s"}</small></a>`; }).join("")}</div>
-      <div class="pending-aisles"><span>${I("info")}<b>More aisles once the store's inventory is imported:</b></span>${window.AS_PENDING_AISLES.map(a => `<span class="pa">${a}</span>`).join("")}</div>
+      <div class="sec-h"><div><h2>Popular West African brands</h2><p>Sample catalog. The store sets prices and availability.</p></div><a class="more" href="#/shop">Shop all ${I("arrow")}</a></div>
+      <div class="pgrid pgrid-home">${popular.map(card).join("")}</div>
     </div></section>
 
-    <section class="sec" style="padding-top:6px"><div class="wrap">
-      <div class="sec-h"><div><span class="eyebrow">Cook from home</span><h2>Shop by kitchen</h2><p>Find the staples for the dishes you grew up with.</p></div></div>
-      <div class="regions r3">${REG.map(r => { const items = P.filter(p => p.regions.includes(r.id)).slice(0, 4);
-        return `<a class="region" href="#/shop?region=${r.id}" style="--hue:${r.hue}"><h3>${r.name}</h3><small>${r.countries}</small><div class="stack">${items.map(p => A.art(p)).join("")}</div><span class="go">${I("arrow")}</span></a>`; }).join("")}</div>
-    </div></section>
-
-    <section class="sec" style="padding-top:6px"><div class="wrap">
-      <div class="sec-h"><div><span class="eyebrow">Pantry staples</span><h2>Everyday West African essentials</h2><p>Real brands shown for demonstration. Prices and stock will come from the store.</p></div><a class="more" href="#/shop">See all ${I("arrow")}</a></div>
-      <div class="rail">${staples.map(card).join("")}</div>
-    </div></section>
-
-    <section class="sec"><div class="wrap"><div class="brandband">
-      <div class="sec-h"><div><span class="eyebrow" style="color:var(--gold)">Familiar names</span><h2>Shop by brand</h2><p>Brand names belong to their owners. Shown as demonstration inventory only.</p></div><a class="more" href="#/brands" style="color:var(--fresh)">All brands ${I("arrow")}</a></div>
-      <div class="brandgrid">${brands.map(b => { const items = P.filter(p => p.brand === b);
-        return `<a class="brandtile" href="#/shop?brand=${encodeURIComponent(b)}"><span class="bstack">${items.slice(0, 2).map(p => A.art(p)).join("")}</span><b>${esc(b)}</b><small>${items.length} item${items.length === 1 ? "" : "s"}</small></a>`; }).join("")}</div>
+    <section class="sec"><div class="wrap"><div class="beautyband">
+      <figure><img src="img/store-beauty-800.webp" srcset="img/store-beauty-800.webp 800w, img/store-beauty.webp 1448w" sizes="(max-width: 900px) 100vw, 50vw" alt="Beauty aisle at Africa Supermarket with hair care, lotions, creams and soaps" loading="lazy"><figcaption>The beauty aisle at Africa Supermarket</figcaption></figure>
+      <div class="bb-copy"><span class="eyebrow" style="color:var(--gold)">Beauty supply</span><h2>Hair care, skin care &amp; beauty, all in one place</h2>
+        <p>Hair products, lotions, creams, soaps and oils fill a whole wall of the store. Online, they become a full beauty department, so customers can buy them with their groceries.</p>
+        <div class="bb-chips">${BEAUTY.map(b => `<a href="#/beauty">${b}</a>`).join("")}</div>
+        <a class="btn btn-gold" href="#/beauty">Explore the beauty department ${I("arrow")}</a></div>
     </div></div></section>
 
-    <section class="sec" id="ship"><div class="wrap">
-      <div class="sec-h"><div><span class="eyebrow">Nationwide collection · proposed</span><h2>Packaged pantry staples, shipped from Columbus*</h2><p>The store decides which items ship. Until then, every item shows “shipping to be confirmed”.</p></div></div>
-      <div class="shipzone">${shipCard()}<div class="pgrid">${P.slice(0, 8).map(card).join("")}</div></div>
-    </div></section>
-
-    <section class="sec" id="boxes"><div class="wrap">
-      <div class="sec-h"><div><span class="eyebrow">New idea · curated</span><h2>African pantry boxes</h2><p>Ready-made bundles: easy gifts, easy first orders. Contents and pricing to be set by the store.</p></div><a class="more" href="#/boxes">All boxes ${I("arrow")}</a></div>
-      ${boxesHTML()}
-    </div></section>
-
-    <section class="sec"><div class="wrap"><div class="reorder">
-      <div class="who"><span class="chip chip-demo" style="align-self:flex-start">Sample returning customer</span><div class="avatar">A</div><h3>Welcome back, Aminata</h3>
-        <p style="margin:0;color:var(--ink-2);font-size:14px">Your usual items, one tap away (sample order history).</p>
-        <button class="btn btn-d" data-act="reorder-all" style="align-self:flex-start">${I("repeat")}Add all to cart</button>
-        <span class="note-demo">${I("info")}Repeat delivery (every 2–6 weeks) is a proposed option, not yet offered.</span></div>
-      <div class="relist">${past.map(p => `<div class="reitem">${A.art(p)}<span><b>${esc(p.brand)} ${esc(p.title)}</b><small>${p.size ? esc(p.size) + " · " : ""}${p.price != null ? money(p.price) : "price set by store"}</small></span><button data-act="add" data-id="${p.id}" aria-label="Add ${esc(p.title)} again">${I("plus")}</button></div>`).join("")}</div>
-    </div></div></section>
-
-    <section class="sec"><div class="wrap duo">
-      <div class="panel panel-gold"><span class="eyebrow" style="color:var(--forest)">Restaurants · events · community groups</span><h3>Need it in bulk?</h3>
-        <p>Weddings, naming ceremonies, Eid, church and mosque events, restaurants and caterers. Request a quote for large quantities.</p>
-        <div class="uses"><span>Bags of rice</span><span>Cases of evaporated milk</span><span>Party supplies</span><span>Halal meat orders</span></div>
-        <button class="btn btn-d" data-act="bulk">Request a bulk quote ${I("arrow")}</button></div>
-      <div class="panel panel-white"><span class="eyebrow">Stay in the loop</span><h3>New arrivals in your inbox</h3>
-        <p style="color:var(--ink-2)">Restocks of hard-to-find items and store news. One email a week.</p>
-        <form class="inline-form" data-form="news"><label class="sr" for="nl">Email</label><input id="nl" type="email" required placeholder="you@email.com"><button class="btn btn-d">Sign up</button></form>
-        <p class="note-demo" style="margin-top:10px">${I("info")}Demo form: no email is stored or sent.</p></div>
+    <section class="sec"><div class="wrap">
+      <div class="sec-h"><div><h2>Shop by brand</h2></div><a class="more" href="#/brands">All brands ${I("arrow")}</a></div>
+      <div class="brandrow">${brands.map(b => { const p = P.find(x => x.brand === b); return `<a class="brandchip" href="#/shop?brand=${encodeURIComponent(b)}">${A.art(p)}<b>${esc(b)}</b></a>`; }).join("")}</div>
     </div></section>
 
     <section class="sec"><div class="wrap">
-      <div class="sec-h"><div><span class="eyebrow">Our store</span><h2>Visit us on East Livingston</h2></div><a class="more" href="${C.store.mapsUrl}" target="_blank" rel="noopener">Directions ${I("arrow")}</a></div>
-      <div class="store">
-        <figure><img src="img/store-front.webp" alt="Africa Supermarket storefront windows with grocery and halal graphics" loading="lazy"><figcaption>Storefront display, Africa Supermarket (from the store's Facebook page)</figcaption></figure>
-        <figure><img src="img/store-aisle.webp" alt="Grocery aisle with shelves of African products and flags overhead" loading="lazy"><figcaption>Aisle photo · source to be confirmed by the owner before launch</figcaption></figure>
-        <div class="storeinfo"><h3>Africa Supermarket</h3>
-          <div class="row">${I("pin")}<span>${C.store.street}<br>${C.store.city}, ${C.store.state} ${C.store.zip}</span></div>
-          <div class="row">${I("phone")}<a href="${C.store.phoneHref}">${C.store.phone}</a></div>
-          <div class="row">${I("store")}<span>Order online, pick up in store<br><small style="color:#B9CBB6">${C.store.hoursNote}</small></span></div>
-          <a class="btn btn-p" href="${C.store.mapsUrl}" target="_blank" rel="noopener" style="margin-top:auto">${I("pin")}Get directions</a></div>
+      <div class="sec-h"><div><h2>Get your order your way</h2><p>Store pickup comes first. Local delivery and nationwide shipping are proposed options for the owner to approve.</p></div></div>
+      <div class="ways">
+        <button class="way" data-act="mode" data-mode="pickup">${I("store")}<b>Store pickup</b><span>Order online and collect at ${C.store.street}. No waiting at the shelf.</span><em>Simplest service to launch first</em></button>
+        <button class="way" data-act="mode" data-mode="local">${I("bike")}<b>Local delivery</b><span>Deliveries to nearby Columbus ZIP codes, with a fee and minimum set by the store.</span><em class="prop">Proposed</em></button>
+        <button class="way" data-act="mode" data-mode="ship">${I("truck")}<b>Nationwide shipping</b><span>Packaged pantry items shipped from Columbus to families in other states.</span><em class="prop">Proposed · pending owner approval</em></button>
       </div>
-    </div></section>`;
+    </div></section>
+
+    <section class="sec"><div class="wrap">
+      <div class="more3">
+        <a href="#/boxes">${I("box")}<span><b>Pantry boxes</b><small>Ready-made bundles for gifts and first orders</small></span></a>
+        <a href="#" data-act="bulk">${I("users")}<span><b>Bulk &amp; event orders</b><small>Weddings, naming ceremonies, restaurants</small></span></a>
+        <a href="#/account">${I("repeat")}<span><b>Reorder favorites</b><small>One tap to buy your usual items again</small></span></a>
+      </div>
+    </div></section>
+
+    <section class="sec"><div class="wrap"><div class="visit">
+      <figure><img src="img/store-front-800.webp" alt="Africa Supermarket storefront" loading="lazy"></figure>
+      <div class="visit-info"><span class="eyebrow" style="color:var(--gold)">Visit the store</span><h2>Africa Supermarket</h2>
+        <div class="row">${I("pin")}<span>${C.store.street}<br>${C.store.city}, ${C.store.state} ${C.store.zip}</span></div>
+        <div class="row">${I("phone")}<a href="${C.store.phoneHref}">${C.store.phone}</a></div>
+        <div class="row">${I("store")}<span>African Food &amp; Beauty Supply<br><small>${C.store.hoursNote}</small></span></div>
+        <div class="visit-ctas"><a class="btn btn-p" href="${C.store.mapsUrl}" target="_blank" rel="noopener">${I("pin")}Get directions</a><a class="btn btn-o" href="${C.store.phoneHref}" style="color:#fff">${I("phone")}Call</a></div>
+      </div>
+    </div></div></section>`;
   };
 
+  const BEAUTY = ["Hair care", "Skin care", "Body lotions & creams", "Soaps", "Hair oils & butters", "Braiding & styling"];
+  V.beauty = () => `
+    <div class="wrap" style="padding-top:18px">
+      <div class="beautyband big">
+        <figure><img src="img/store-beauty.webp" alt="Beauty aisle at Africa Supermarket with hair care, lotions, creams and soaps"><figcaption>The beauty aisle at Africa Supermarket</figcaption></figure>
+        <div class="bb-copy"><span class="eyebrow" style="color:var(--gold)">Beauty department</span><h1>African hair care, skin care &amp; beauty supply</h1>
+          <p>This department would list the store's beauty products online with real photos and prices, imported from the store's inventory.</p>
+          <a class="btn btn-gold" href="${C.store.phoneHref}">${I("phone")}Ask the store: ${C.store.phone}</a></div>
+      </div>
+      <section class="sec"><div class="sec-h"><div><h2>Shop by need</h2><p>Departments to fill from the store's beauty inventory.</p></div></div>
+        <div class="needgrid">${BEAUTY.map((b, i) => `<div class="need"><span class="ni">${I(["drop", "star", "drop", "box", "drop", "star"][i])}</span><b>${b}</b><small>Products to be added from store inventory</small></div>`).join("")}</div>
+      </section>
+    </div>`;
+
   function shipCard() {
-    const s = A.shipping();
-    return `<aside class="shipcard"><span class="eyebrow">Check your address</span><h3>Where could we ship?</h3>
+    return `<aside class="shipcard"><span class="eyebrow">Proposed · pending owner approval</span><h3>Nationwide shipping</h3>
       <form class="zipf" data-form="zip2" style="width:100%"><span>${I("pin")}</span><input name="z" inputmode="numeric" maxlength="5" placeholder="Your ZIP" value="${esc(A.zip())}" style="flex:1"><button>Check</button></form>
-      <ul><li>${I("check")}<span>Packaged, shelf-stable pantry items, once the store approves each one</span></li>
-        <li>${I("info")}<span>Shipping cost quoted by the store until prices and package weights are entered</span></li>
-        <li class="no">${I("x")}<span>Fresh, frozen, halal meat and glass items would stay pickup or local delivery</span></li></ul>
-      <table class="zonetable" aria-label="Proposed shipping zones"><tbody>${s.zones.map(z => `<tr><td>${z.name}</td><td>${z.days} days</td></tr>`).join("")}</tbody></table>
-      <p class="note-demo" style="margin-top:10px">${I("info")}*Proposed zones and delivery times for discussion. ${esc(s.blockedNote)}. Real rates would come from the store's carrier account.</p></aside>`;
+      <ul><li>${I("check")}<span>Packaged, shelf-stable items the store chooses to ship</span></li>
+        <li>${I("info")}<span>Rates, packaging and delivery times to be set by the store with its carrier</span></li>
+        <li class="no">${I("x")}<span>Fresh produce, frozen foods, halal meat and glass stay pickup or local</span></li></ul>
+      <p class="note-demo">${I("info")}${esc(A.shipping().blockedNote)}.</p></aside>`;
   }
   function boxesHTML() {
     return `<div class="boxes">${BOXES.map(b => { const items = b.items.map(A.product); const priced = items.every(p => p.price != null);
@@ -220,7 +215,7 @@
 
   V.brands = () => {
     const P = live(); const brands = [...new Set(P.map(p => p.brand))].filter(b => b !== "Market pack");
-    return `<div class="wrap" style="padding-top:20px"><div class="sec-h"><div><span class="eyebrow">Demonstration inventory</span><h2>Shop by brand</h2><p>Brand names and product photos belong to their owners. Availability at Africa Supermarket is not yet confirmed.</p></div></div>
+    return `<div class="wrap" style="padding-top:20px"><div class="sec-h"><div><h2>Shop by brand</h2><p>Brand names and product photos belong to their owners.</p></div></div>
       ${brands.map(b => `<section class="sec" style="padding:14px 0"><div class="sec-h"><h2 style="font-size:22px">${esc(b)}</h2><a class="more" href="#/shop?brand=${encodeURIComponent(b)}">View ${I("arrow")}</a></div><div class="rail">${P.filter(p => p.brand === b).map(card).join("")}</div></section>`).join("")}</div>`;
   };
 
@@ -259,7 +254,7 @@
         <div class="toolbar"><h1>${title}</h1><button class="btn btn-o filter-toggle" data-act="filters" style="padding:8px 14px;color:var(--forest)">${I("filter")}Filters</button>
           <label class="sr" for="sort">Sort</label><select id="sort" data-act="sort">${[["cat", "By aisle"], ["brand", "Brand A–Z"], ["az", "Name A–Z"]].map(([v, l]) => `<option value="${v}" ${qs.get("sort") === v ? "selected" : ""}>${l}</option>`).join("")}</select></div>
         ${chips.length ? `<div class="fchips">${chips.map(([k, l]) => `<a class="fchip" href="${link(k, null)}">${esc(l)} ${I("x")}</a>`).join("")}<a class="fchip" href="#/shop">Clear all</a></div>` : ""}
-        <div class="banner banner-info">${I("info")}<span><b>Demonstration inventory.</b> Africa Supermarket has not yet confirmed which of these it stocks. Prices, stock and shipping eligibility will be set by the store.</span></div>
+        <p class="note-demo" style="margin:0 0 12px">${I("info")}Sample catalog: the store will confirm products, prices and shipping eligibility.</p>
         ${L.length ? `<div class="pgrid">${L.map(card).join("")}</div>` : `<div class="empty">${I("search")}<p><b>No demo products match.</b><br>Try “Milo”, “garri”, “Maggi” or browse a category.</p><a class="btn btn-d" href="#/shop">See all products</a></div>`}
       </div></div>`;
   };
@@ -268,12 +263,12 @@
   V.product = (handle) => {
     const p = A.product(handle); if (!p || !p.active) return `<div class="wrap empty"><p>Product not found.</p><a class="btn btn-d" href="#/shop">Back to shop</a></div>`;
     const cat = catById(p.category), f = A.fulfillment();
-    const opt = (icon, label, st, why) => `<div class="fopt ${st === true ? "yes" : st === false ? "no" : "tbc"}">${I(st === false ? "x" : icon)}<span><b>${label}</b><small>${esc(why)}</small></span><span class="st">${st === true ? "Available" : st === false ? "Not available" : "To be confirmed"}</span></div>`;
+    const opt = (icon, label, st, why, prop) => `<div class="fopt ${st === true ? "yes" : st === false ? "no" : "tbc"}">${I(st === false ? "x" : icon)}<span><b>${label}</b><small>${esc(why)}</small></span><span class="st">${prop && st !== false ? "Proposed" : st === true ? "Available" : st === false ? "Not available" : "To be confirmed"}</span></div>`;
     const related = live().filter(x => x.category === p.category && x.id !== p.id).slice(0, 4);
     const w = A.wish().includes(p.id);
     return `<div class="wrap">
       <div class="pd">
-        <div class="gallery">${A.art(p, "art big")}<span class="cap">Product photo: ${esc(p.imageSource || "")} · © brand owner · permission required before public use</span></div>
+        <div class="gallery">${A.art(p, "art big")}<span class="cap">Photo: ${esc(p.imageSource || "")}</span></div>
         <div>
           <nav class="crumbs"><a href="#/">Home</a>/<a href="#/shop?cat=${cat.id}">${cat.name}</a>/<a href="#/shop?brand=${encodeURIComponent(p.brand)}">${esc(p.brand)}</a></nav>
           <span class="brand" style="font-size:14px;margin-top:10px;display:block">${esc(p.brand)}</span>
@@ -282,9 +277,9 @@
           <div>${A.priceHTML(p, "bigprice")}</div>
           <p style="color:var(--ink-2);font-size:16px">${esc(p.desc)}</p>
           <div class="fopts">
-            ${opt("truck", f.ship.label, p.ship, p.ship === true ? "Ships from Columbus" : p.ship === false ? "Store has marked this item pickup/local only" : "Store will confirm shipping eligibility")}
+            ${opt("truck", f.ship.label, p.ship, p.ship === false ? "Store has marked this item pickup/local only" : "Shipped from Columbus, pending owner approval", true)}
             ${opt("store", f.pickup.label, p.pickup, C.store.street)}
-            ${opt("bike", f.local.label + " (proposed)", p.local, "Approved Columbus ZIP codes")}
+            ${opt("bike", f.local.label, p.local, "Nearby Columbus ZIP codes", true)}
           </div>
           <div class="buyrow" data-actions="${p.id}" style="display:block">${actionsHTML(p)}</div>
           <div style="display:flex;gap:10px;margin-top:10px"><button class="btn btn-o" style="color:var(--forest);flex:1" data-act="wish" data-id="${p.id}" data-wish="${p.id}">${I("heart")}${w ? "Saved" : "Save for later"}</button></div>
@@ -344,8 +339,7 @@
   V.about = () => {
     const rows = [
       ["Store name, logo, address and phone", "From the store's public Facebook page", "Real"],
-      ["Storefront photo", "From the store's Facebook page", "Real"],
-      ["Aisle photo", "Supplied; source not yet confirmed", "To verify"],
+      ["Storefront and beauty-aisle photos", "Supplied by Dalal Technologies (enhanced store photos)", "Real"],
       ["12 branded products & photos", "Real products; photos from grocery retailer sites (listed in img/products/SOURCES.csv). Not yet confirmed as stocked by this store", "Demo inventory"],
       ["Product photo rights", "Owned by brands/retailers; permission or manufacturer images needed before public use", "To clear"],
       ["Prices, stock, shipping eligibility", "Not set — entered by the store in the owner dashboard", "Store to set"],
@@ -407,7 +401,7 @@
     const ready = !t.blocked.length && t.deliveryOk;
     const cp = t.coupon; const m = A.mode();
     const lp = l => l.price != null ? money(l.price * l.qty) : "Price TBC";
-    return `<h2 style="margin-bottom:10px">Order summary · ${t.count} item${t.count === 1 ? "" : "s"}</h2>
+    return `${full ? `<h2 style="margin-bottom:10px">Order summary · ${t.count} item${t.count === 1 ? "" : "s"}</h2>` : ""}
       ${full ? t.lines.map(l => `<div class="sumrow"><span>${l.qty}× ${esc((l.brand && !l.isBox ? l.brand + " " : "") + l.title)}${A.canFulfill(l).ok ? "" : ` <span class="chip chip-local">Can't ${m === "ship" ? "ship" : "fulfill"}</span>`}</span><span>${lp(l)}</span></div>`).join("") + '<hr style="border:0;border-top:1px solid var(--line)">' : ""}
       ${t.allPriced ? `<div class="sumrow"><span>Subtotal</span><span>${money(t.subtotal)}</span></div>` : `<div class="sumrow"><span>Subtotal</span><span class="muted">Confirmed by store</span></div>`}
       ${t.discount ? `<div class="sumrow" style="color:var(--ok)"><span>Discount (${cp.code})</span><span>−${money(t.discount)}</span></div>` : ""}
@@ -495,6 +489,7 @@
     else if (parts[0] === "wishlist") html = V.wishlist();
     else if (parts[0] === "boxes") html = V.boxes();
     else if (parts[0] === "brands") html = V.brands();
+    else if (parts[0] === "beauty") html = V.beauty();
     else if (parts[0] === "shipping") html = V.shipping();
     else if (parts[0] === "account") html = V.account();
     else if (parts[0] === "about-demo") html = V.about();

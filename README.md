@@ -31,7 +31,7 @@ Drag the folder onto Netlify (Deploys → drag & drop), or connect a GitHub repo
 - Confirm the aisle photo's source and whether the store carries clothing; confirm halal certification wording with suppliers
 
 ## Image credits
-- Logo and storefront photo: from the store's public Facebook page
-- Aisle photo: supplied, source to be confirmed
+- Logo: from the store's public Facebook page
+- Storefront and beauty-aisle photos: supplied enhanced photos of the store (`img/store-front*.webp`, `img/store-beauty*.webp`)
 - Product photos: supplied image pack, originally from retailer sites listed in `img/products/SOURCES.csv`; © their owners; internal demo only until permission or manufacturer images are obtained. Do not hotlink retailer CDNs.
 - Not used: the haircare product photo, the watermarked stock photo, the Facebook screenshots, AI ingredient images

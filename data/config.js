@@ -40,14 +40,14 @@ window.AS_CONFIG = {
 
   /* Fulfillment modes. `active:false` would hide a mode from shoppers. */
   fulfillment: {
-    ship:   { label: "Nationwide shipping", short: "Ship", active: true,
-              note: "Shelf-stable items only, shipped from Columbus" },
+    ship:   { label: "Nationwide shipping", short: "Ship", active: true, proposed: true,
+              note: "Proposed: eligible packaged items, pending owner approval" },
     pickup: { label: "Columbus store pickup", short: "Pickup", active: true,
               note: "Order online, collect at 3639 E Livingston Ave", fee: 0,
-              readyNote: "Sample: ready in about 2 hours" },
+              readyNote: "Pickup times would follow store hours" },
     local:  { label: "Local delivery", short: "Delivery", active: true, proposed: true,
               note: "Proposed service for approved Columbus ZIP codes", fee: 7.99, minOrder: 35,
-              windowNote: "Sample: same-day or next-day windows" }
+              windowNote: "Delivery windows to be set by the store" }
   },
 
   /* Nationwide shipping — sample rate table by zone. Zone is chosen from the

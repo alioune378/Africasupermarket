@@ -70,13 +70,13 @@
     if (!/^\d{5}$/.test(z)) return { ok: false, text: "Enter a 5-digit US ZIP" };
     if (m === "local") {
       return localZips().includes(z)
-        ? { ok: true, text: "Local delivery available to " + z, sub: fulfillment().local.windowNote }
-        : { ok: false, text: z + " is outside the sample delivery area", sub: "Try store pickup or nationwide shipping" };
+        ? { ok: true, text: z + " is in the proposed delivery area", sub: fulfillment().local.windowNote }
+        : { ok: false, text: z + " is outside the proposed delivery area", sub: "Try store pickup" };
     }
     const zn = zoneFor(z);
     if (!zn) return { ok: false, text: "ZIP not recognized" };
-    if (zn.blocked) return { ok: false, text: "Shipping to " + z + " not offered in this demo", sub: shipping().blockedNote };
-    return { ok: true, text: "Ships to " + z + " · " + zn.days + " business days", sub: zn.name, zone: zn };
+    if (zn.blocked) return { ok: false, text: z + " is outside the proposed shipping area", sub: shipping().blockedNote };
+    return { ok: true, text: z + " · " + zn.name.split("·")[0].trim() + " of proposed shipping", sub: "Rates and timing to be set by the store", zone: zn };
   }
 
   /* Can product p be fulfilled with mode m? */
@@ -171,7 +171,7 @@
       else {
         const shippable = lines.filter(l => l.ship !== false);
         const knownW = shippable.every(l => l.weightLb != null);
-        deliveryLabel = "Shipping · " + st.zone.id + " · " + st.zone.days + " days";
+        deliveryLabel = "Shipping · " + st.zone.id + " (proposed)";
         if (!knownW || !allPriced) { deliveryQuoted = true; deliveryNote = "Quoted by store"; }
         else {
           const w = shippable.reduce((a, l) => a + l.weightLb * l.qty, 0);
@@ -245,6 +245,7 @@
     chart: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
     tag: '<path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1.5"/>',
     users: '<circle cx="9" cy="8" r="3.5"/><path d="M2 20c1-4 4-6 7-6s6 2 7 6"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.5 0 4.5 1.5 5 5"/>',
+    drop: '<path d="M12 3s-6 6.6-6 11a6 6 0 0012 0c0-4.4-6-11-6-11z"/>',
     settings: '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/>'
   };
   function icon(n, cls) { return `<svg class="ic ${cls || ""}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n] || ""}</svg>`; }
