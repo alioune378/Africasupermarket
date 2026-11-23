@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Presenter view — Africa Supermarket opportunity (Dalal Technologies)</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/png" href="img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--forest:#143B2B;--fresh:#80B943;--ivory:#F9F6EC;--gold:#D7A849;--ink:#202720;--ink3:#6E776F;--line:#E6E0CF;--asm:#4B3A99;--asm-bg:#ECE7FF;--ver:#1F6B45;--ver-bg:#E3F2DA;--s1:#2E7D4F;--s2:#C98A1B;--s3:#3D6FB0;--bad:#B3261E;
+  --fd:"Bricolage Grotesque","Avenir Next",system-ui,sans-serif;--f:"Figtree","Segoe UI",system-ui,sans-serif}
+*{box-sizing:border-box}body{margin:0;font-family:var(--f);background:#10261C;color:var(--ink);-webkit-font-smoothing:antialiased}
+button,input{font:inherit}
+.gate{min-height:100vh;display:grid;place-items:center;padding:20px}
+.gate form{background:#fff;border-radius:20px;padding:28px;width:min(380px,100%);text-align:center}
+.gate h1{font-family:var(--fd);margin:8px 0 6px;font-size:24px}
+.gate input{width:100%;height:52px;border-radius:12px;border:2px solid var(--line);text-align:center;font-size:24px;letter-spacing:10px;margin:14px 0 10px}
+.gate button{width:100%;height:48px;border:0;border-radius:12px;background:var(--forest);color:#fff;font-weight:800;cursor:pointer}
+.gate small{display:block;margin-top:10px;color:var(--ink3)}
+.app{display:none}
+header{display:flex;align-items:center;gap:14px;padding:16px 24px;color:#fff;flex-wrap:wrap}
+header img{height:44px;background:#fff;border-radius:10px;padding:4px 8px}
+header h1{font-family:var(--fd);margin:0;font-size:22px;flex:1;min-width:240px}
+header h1 small{display:block;font-family:var(--f);font-size:12.5px;color:#B9CBB6;font-weight:500}
+header a{color:var(--gold);font-weight:700;text-decoration:none;font-size:14px}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 40px}
+.legend{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 12px;color:#CFDCCC;font-size:13px;align-items:center}
+.tag{display:inline-flex;align-items:center;font-size:10.5px;font-weight:800;padding:2px 7px;border-radius:6px;letter-spacing:.3px;text-transform:uppercase;white-space:nowrap}
+.t-a{background:var(--asm-bg);color:var(--asm)} .t-v{background:var(--ver-bg);color:var(--ver)} .t-n{background:#F1EFEA;color:var(--ink3)}
+.compare{display:grid;grid-template-columns:1fr 1.5fr;gap:14px}
+.panel{background:#fff;border-radius:20px;padding:20px}
+.panel h2{font-family:var(--fd);margin:4px 0 4px;font-size:22px;letter-spacing:-.4px}
+.eb{font-size:11.5px;letter-spacing:1.3px;text-transform:uppercase;font-weight:800;color:#A97C22}
+.now ul,.next ul{padding-left:18px;margin:10px 0;line-height:1.6;font-size:14.5px}
+.reach{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.reach div{border-radius:14px;padding:14px;background:#F6F3EA}
+.reach b{font-family:var(--fd);font-size:20px;display:block}
+.reach small{color:var(--ink3);font-size:12.5px}
+.reach .big{background:var(--forest);color:#fff}.reach .big small{color:#B9CBB6}
+.field{margin:10px 0}
+.field label{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13px;font-weight:700}
+.field label output{font-family:var(--fd);font-size:17px;font-weight:800;color:var(--forest)}
+.field input[type=range]{width:100%;accent-color:var(--forest);height:28px}
+.field input[type=number]{width:120px;height:36px;border-radius:9px;border:1.5px solid var(--line);padding:0 8px;text-align:right;font-weight:700}
+.scen{display:flex;gap:6px;margin:8px 0 6px;flex-wrap:wrap}
+.scen button{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-weight:700;cursor:pointer}
+.scen button.on{background:var(--forest);color:#fff;border-color:var(--forest)}
+.inputs{display:grid;grid-template-columns:1fr 1fr;gap:4px 22px}
+.results{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
+.res{border-radius:14px;padding:12px;background:#F6F3EA}
+.res .l{font-size:12px;font-weight:700;color:var(--ink3);display:flex;justify-content:space-between;gap:4px}
+.res .v{font-family:var(--fd);font-size:26px;font-weight:800;letter-spacing:-.5px;margin-top:4px}
+.res.hl{background:var(--forest);color:#fff}.res.hl .l{color:#B9CBB6}
+.res.neg .v{color:var(--bad)}
+.flow{margin-top:14px}
+.flow .r{display:grid;grid-template-columns:170px 1fr 90px;gap:10px;align-items:center;font-size:13.5px;margin:6px 0}
+.flow .tr{height:18px;background:#F1EDE2;border-radius:4px;position:relative;overflow:hidden}
+.flow .tr i{position:absolute;top:0;bottom:0;border-radius:4px}
+.flow .v{text-align:right;font-weight:800;font-variant-numeric:tabular-nums}
+details{margin-top:10px;font-size:13.5px}
+summary{cursor:pointer;font-weight:800;color:var(--forest)}
+.story{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:14px}
+.story .panel{padding:16px}
+.story .n{width:30px;height:30px;border-radius:50%;background:var(--fresh);color:var(--forest);display:grid;place-items:center;font-weight:800}
+.story h3{font-family:var(--fd);margin:8px 0 4px;font-size:17px}
+.story p{margin:0;font-size:13.5px;color:#4A544B}
+.story a{color:var(--forest);font-weight:800}
+.foot{color:#B9CBB6;font-size:13px;margin-top:20px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.foot a{color:var(--gold)}
+.dw{display:flex;align-items:center;gap:8px}.dw .d{width:32px;height:32px;border-radius:8px;background:#1B2A4A;color:#fff;display:grid;place-items:center;font-weight:900;font-family:var(--fd);position:relative;overflow:hidden}
+.dw .d::after{content:"";position:absolute;right:4px;top:8px;border-left:8px solid var(--gold);border-top:8px solid transparent;border-bottom:8px solid transparent}
+.dw b{color:#fff;letter-spacing:1.4px;display:block;line-height:1;font-size:14px}.dw i{font-style:normal;color:var(--gold);letter-spacing:2.2px;font-size:9px;font-weight:700}
+@media(max-width:980px){.compare{grid-template-columns:1fr}.results{grid-template-columns:1fr 1fr}.story{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.inputs{grid-template-columns:1fr}.story{grid-template-columns:1fr}.flow .r{grid-template-columns:110px 1fr 74px}.res .v{font-size:21px}}
+</style>
+</head>
+<body>
+<div class="gate" id="gate"><form id="pinf"><div class="eb">Presenter only</div><h1>Sales demonstration panel</h1><p style="margin:0;color:var(--ink3)">Enter the presenter PIN.</p>
+  <label for="pin" style="position:absolute;left:-9999px">PIN</label><input id="pin" inputmode="numeric" maxlength="6" autocomplete="off" autofocus><button>Open</button>
+  <small>Hidden from shoppers. This PIN is a convenience, not security.</small><small><a href="index.html">← Back to storefront</a></small></form></div>
+
+<div class="app" id="app">
+<header><img src="img/logo.png" alt="Africa Supermarket"><h1>From one store in Columbus to customers across the U.S.<small>Presenter view · prepared by Dalal Technologies · all figures are adjustable assumptions</small></h1>
+  <a href="index.html" target="_blank">Open storefront ↗</a><a href="dashboard.html" target="_blank">Owner dashboard ↗</a></header>
+<div class="wrap">
+  <div class="legend"><span class="tag t-a">Assumption</span> adjustable estimate &nbsp;·&nbsp; <span class="tag t-v">Verified</span> confirmed with real data &nbsp;·&nbsp; <span class="tag t-n">Needed</span> to be provided by the owner. <b style="color:#fff">No figure on this page is verified yet.</b></div>
+  <div class="compare">
+    <section class="panel now"><span class="eb">Today</span><h2>Local-store-only model</h2>
+      <ul><li>Customers must live within driving distance of 3639 E Livingston Ave.</li><li>Sales happen only during store hours, in person or by phone.</li><li>Families who moved away, students and customers in towns without an African grocery can't buy.</li><li>No online record of what repeat customers buy.</li></ul>
+      <div class="reach"><div><small>Reach</small><b>Columbus area</b><small>walk-in and phone</small></div><div><small>Open for orders</small><b>Store hours</b><small>to be confirmed</small></div></div>
+      <div class="field"><label for="cur">Current monthly in-store sales <span class="tag t-n">Needed</span></label><input type="number" id="cur" placeholder="Owner to provide" min="0" step="500" style="width:100%"></div>
+      <p style="font-size:13px;color:var(--ink3);margin:4px 0 0" id="curNote">Enter it to show online sales as a share of today's business.</p>
+    </section>
+    <section class="panel next"><span class="eb">Proposed</span><h2>Nationwide-commerce model</h2>
+      <div class="reach"><div class="big"><small>Reach</small><b>Lower 48 states*</b><small>shelf-stable items, plus pickup & local</small></div><div><small>Open for orders</small><b>24/7 online</b><small>orders arrive in the owner dashboard</small></div></div>
+      <div class="scen" id="scen"><button data-s="conservative">Conservative</button><button data-s="moderate" class="on">Moderate</button><button data-s="ambitious">Ambitious</button></div>
+      <div class="inputs" id="inputs"></div>
+      <details><summary>Operating cost assumptions</summary><div class="inputs" id="costs"></div></details>
+      <div class="results" id="results"></div>
+      <div class="flow" id="flow"></div>
+      <p style="font-size:12.5px;color:var(--ink3);margin:10px 0 0">*Only items the store approves for shipping; excludes fresh, frozen and glass items, and (in this demo) Alaska, Hawaii and Puerto Rico. Products shown in the demo are real brands not yet confirmed as stocked. Illustrative estimates for discussion — not a forecast, quote or guarantee. Sales tax, refunds and income taxes are not modeled.</p>
+    </section>
+  </div>
+
+  <div class="story">
+    <div class="panel"><span class="n">1</span><h3>Show the store, online</h3><p>Open the <a href="index.html" target="_blank">storefront</a>: real logo, address and storefront photo, real products like Milo, Peak, Maggi and Indomie. Search “garri”.</p></div>
+    <div class="panel"><span class="n">2</span><h3>Ship to another state</h3><p>Choose <b>Ship</b>, enter ZIP <b>30303</b> (Atlanta) and add a few items. With no prices set, the order goes in as a request the store confirms.</p></div>
+    <div class="panel"><span class="n">3</span><h3>The owner stays in control</h3><p>In the <a href="dashboard.html#products" target="_blank">dashboard</a>, type a price and set <b>Ship = No</b> on one item. The storefront updates and blocks shipping for it.</p></div>
+    <div class="panel"><span class="n">4</span><h3>Receive the order</h3><p>Send the demo order, then open <a href="dashboard.html#orders" target="_blank">Orders</a>: it's at the top, marked “From storefront”.</p></div>
+  </div>
+
+  <div class="foot"><span class="dw"><span class="d">D</span><span><b>DALAL</b><i>TECHNOLOGIES</i></span></span><span id="dcontact"></span></div>
+</div></div>
+
+<script src="data/config.js"></script>
+<script>
+(function(){
+  const C = window.AS_CONFIG, $ = s => document.querySelector(s);
+  const ok = () => { $("#gate").style.display = "none"; $("#app").style.display = "block"; };
+  try { if (sessionStorage.getItem("as_presenter") === "1") ok(); } catch (e) {}
+  $("#pinf").addEventListener("submit", e => { e.preventDefault(); if ($("#pin").value === C.presenterPin) { try { sessionStorage.setItem("as_presenter", "1"); } catch (e) {} ok(); } else { $("#pin").value = ""; $("#pin").placeholder = "Try again"; } });
+  const b = C.builder;
+  $("#dcontact").innerHTML = `${b.websiteLabel ? `<a href="${b.website}" target="_blank" rel="noopener">${b.websiteLabel}</a>` : ""} · <a href="mailto:${b.email}">${b.email}</a> · ${b.phone} · ${b.address}`;
+
+  const S = {
+    conservative: { orders: 120, basket: 48, margin: 28, ship: 50 },
+    moderate:     { orders: 250, basket: 55, margin: 30, ship: 55 },
+    ambitious:    { orders: 500, basket: 62, margin: 32, ship: 60 }
+  };
+  const INPUTS = [
+    ["orders", "Online orders per month", 20, 1500, 10, v => v],
+    ["basket", "Average basket value", 20, 150, 1, v => "$" + v],
+    ["margin", "Gross margin on products", 10, 50, 1, v => v + "%"],
+    ["ship", "Share of orders shipped", 0, 100, 5, v => v + "%"]
+  ];
+  const COSTS = [
+    ["platform", "E-commerce platform & apps ($/mo)", 0, 400, 5, 79],
+    ["payPct", "Card processing (% of sales)", 0, 5, 0.1, 2.9],
+    ["payFix", "Card processing ($ per order)", 0, 1, 0.05, 0.30],
+    ["pack", "Packaging per shipped order ($)", 0, 10, 0.25, 2.50],
+    ["subsidy", "Shipping cost absorbed per shipped order ($)", 0, 15, 0.5, 3.00],
+    ["hours", "Staff hours per order (picking/packing)", 0, 1, 0.05, 0.25],
+    ["wage", "Hourly staff cost ($)", 0, 40, 0.5, 16],
+    ["mkt", "Marketing ($/mo)", 0, 3000, 50, 300]
+  ];
+  const st = Object.assign({}, S.moderate); COSTS.forEach(c => st[c[0]] = c[5]);
+  $("#inputs").innerHTML = INPUTS.map(([k, l, mn, mx, sp]) => `<div class="field"><label for="i-${k}"><span>${l} <span class="tag t-a">Assumption</span></span><output id="o-${k}"></output></label><input type="range" id="i-${k}" data-k="${k}" min="${mn}" max="${mx}" step="${sp}"></div>`).join("");
+  $("#costs").innerHTML = COSTS.map(([k, l, mn, mx, sp]) => `<div class="field"><label for="i-${k}"><span>${l} <span class="tag t-a">Assumption</span></span><input type="number" id="i-${k}" data-k="${k}" min="${mn}" max="${mx}" step="${sp}"></label></div>`).join("");
+  const m0 = n => (n < 0 ? "−$" : "$") + Math.round(Math.abs(n)).toLocaleString("en-US");
+  function sync() { INPUTS.concat(COSTS).forEach(([k]) => { const el = $("#i-" + k); if (document.activeElement !== el) el.value = st[k]; }); INPUTS.forEach(([k, , , , , f]) => $("#o-" + k).textContent = f(st[k])); }
+  function calc() {
+    const sales = st.orders * st.basket, cogs = sales * (1 - st.margin / 100), gross = sales - cogs;
+    const shipped = st.orders * st.ship / 100;
+    const costs = { "Platform & apps": st.platform, "Card processing": sales * st.payPct / 100 + st.orders * st.payFix, "Packaging": shipped * st.pack, "Shipping absorbed": shipped * st.subsidy, "Staff time": st.orders * st.hours * st.wage, "Marketing": st.mkt };
+    const opex = Object.values(costs).reduce((a, b) => a + b, 0), contrib = gross - opex;
+    const perOrder = st.basket * st.margin / 100 - st.basket * st.payPct / 100 - st.payFix - (st.ship / 100) * (st.pack + st.subsidy) - st.hours * st.wage;
+    const be = perOrder > 0 ? Math.ceil((st.platform + st.mkt) / perOrder) : null;
+    $("#results").innerHTML = [
+      ["Online sales / month", m0(sales), "hl"], ["Gross profit / month", m0(gross), ""], ["Operating costs / month", m0(opex), ""], ["Est. contribution / month", m0(contrib), contrib < 0 ? "neg" : ""]
+    ].map(([l, v, c]) => `<div class="res ${c}"><div class="l"><span>${l}</span><span class="tag t-a">Est.</span></div><div class="v">${v}</div></div>`).join("") +
+      `<div class="res" style="grid-column:1/-1;display:flex;gap:18px;flex-wrap:wrap;align-items:center;font-size:14px"><span><b>${m0(sales * 12)}</b> online sales / year</span><span><b>${m0(contrib * 12)}</b> contribution / year</span><span>Break-even ≈ <b>${be ? be + " orders/mo" : "not reached — margin per order is negative"}</b></span>${curShare(sales)}</div>`;
+    const rows = [["Online sales", sales, "#2E7D4F"], ["Cost of goods", cogs, "#C98A1B"]].concat(Object.entries(costs).map(([k, v]) => [k, v, "#3D6FB0"])).concat([["Contribution", contrib, contrib < 0 ? "#B3261E" : "#143B2B"]]);
+    const max = sales || 1;
+    $("#flow").innerHTML = rows.map(([l, v, c]) => `<div class="r"><span>${l}</span><span class="tr"><i style="left:0;width:${Math.min(100, Math.abs(v) / max * 100)}%;background:${c}"></i></span><span class="v">${m0(v)}</span></div>`).join("");
+  }
+  function curShare(sales) { const c = parseFloat($("#cur").value); return c > 0 ? `<span>Online would add <b>${Math.round(sales / c * 100)}%</b> to today's in-store sales</span>` : ""; }
+  document.addEventListener("input", e => { const k = e.target.dataset.k; if (k) { st[k] = parseFloat(e.target.value) || 0; $$scen(null); sync(); calc(); } if (e.target.id === "cur") { $("#curNote").innerHTML = e.target.value ? '<span class="tag t-n">Owner-provided</span> used for the comparison below.' : "Enter it to show online sales as a share of today's business."; calc(); } });
+  function $$scen(k) { document.querySelectorAll("#scen button").forEach(b => b.classList.toggle("on", b.dataset.s === k)); }
+  $("#scen").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; Object.assign(st, S[b.dataset.s]); $$scen(b.dataset.s); sync(); calc(); });
+  sync(); calc();
+})();
+</script>
+</body>
+</html>

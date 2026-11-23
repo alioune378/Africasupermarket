@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Africa Supermarket — The Flavors of Africa, Delivered (Demo)</title>
+<meta name="description" content="Demonstration storefront for Africa Supermarket, Columbus, Ohio. Prepared by Dalal Technologies. Sample products and prices.">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#143B2B">
+<link rel="icon" type="image/png" href="img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/store.css">
+</head>
+<body>
+<div class="demo-ribbon" role="note"><b>Demo prototype</b><span class="rb-l"> by Dalal Technologies</span> · demonstration inventory<span class="rb-l"> · no real orders or payments</span> · <a href="#/about-demo">What's real?</a></div>
+
+<div class="util"><div class="wrap">
+  <a id="u-phone" href="tel:+16142377988"></a>
+  <a class="hide-m" id="u-addr" target="_blank" rel="noopener"></a>
+  <span class="grow"></span>
+  <span class="promo hide-m">Proposed: pantry staples shipped from Columbus</span>
+</div></div>
+
+<header class="hdr"><div class="wrap">
+  <a class="logo" href="#/" aria-label="Africa Supermarket home"><img src="img/logo.png" alt="Africa Supermarket" width="78" height="54"></a>
+  <form class="search" id="search" role="search" autocomplete="off">
+    <label class="sr" for="q">Search products</label>
+    <input id="q" type="search" placeholder="Search Milo, garri, Peak…" aria-autocomplete="list" aria-controls="suggest">
+    <button class="go" type="submit" aria-label="Search"><span>Search</span></button>
+    <div class="suggest" id="suggest" role="listbox"></div>
+  </form>
+  <nav class="hbtns">
+    <a class="hbtn hide-m" href="#/account"></a>
+    <a class="hbtn hide-m" href="#/wishlist" id="h-wish"></a>
+    <button class="hbtn cartbtn" id="h-cart" aria-label="Open cart"></button>
+  </nav>
+</div></header>
+
+<div class="fbar"><div class="wrap">
+  <div class="seg" id="modeSeg" role="group" aria-label="How do you want your order?"></div>
+  <form class="zipf" id="zipForm"><label class="sr" for="zip">ZIP code</label><span id="zipIc"></span><input id="zip" inputmode="numeric" maxlength="5" placeholder="ZIP code"><button>Check</button></form>
+  <div class="zipmsg" id="zipMsg" aria-live="polite"></div>
+</div></div>
+
+<nav class="crail" aria-label="Categories"><div class="wrap" id="crail"></div></nav>
+
+<main id="view" tabindex="-1"></main>
+
+<footer class="foot"><div class="wrap" id="foot"></div></footer>
+
+<nav class="bnav" id="bnav" aria-label="Mobile"></nav>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="Shopping cart" aria-hidden="true"></aside>
+<div class="modal" id="modal" role="dialog" aria-modal="true"></div>
+<div class="toast" id="toast" role="status"></div>
+<button class="ptrig" id="ptrig" aria-hidden="true" tabindex="-1" title=""></button>
+
+<script src="data/config.js"></script>
+<script src="data/catalog.js"></script>
+<script src="js/core.js"></script>
+<script src="js/store.js"></script>
+</body>
+</html>
